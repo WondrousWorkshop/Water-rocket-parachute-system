@@ -8,6 +8,10 @@ Arduino IDE does not see the Wemos D1.
   Step 4: Select the LOLIN(WEMOS) D1 board
   Now the board should be selectable in the dropdown menu.
 
+LiPo plug does not fit the battery shield LiPo socket
+  I desolderd the standard LiPo socket and connect two wires to the + and -
+  It is also possible to leave the socket on the shield and just solder two wires to the + and - on the backside of the shield.
+  Then add a socket and plug to the wires. Double check the polarity. Twice.
 
 
 
