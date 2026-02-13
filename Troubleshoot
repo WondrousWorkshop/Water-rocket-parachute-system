@@ -1,1 +1,13 @@
 
+//These are the problems I’ve encountered and the solutions that worked for me
+
+Arduino IDE does not see the Wemos D1.
+  Step 1: install the driver from the official Wemos website: https://www.wemos.cc/en/latest/ch340_driver.html
+  Step 2: Add the board driver URL in the Arduino IDE (Bestand > Voorkeuren) " http://arduino.esp8266.com/stable/package_esp8266com_index.json "
+  Step 3: Install the board. go to Hulpmiddelen > Board > Board beheer and look for "ESP8266" 
+  Step 4: Select the LOLIN(WEMOS) D1 board
+  Now the board should be selectable in the dropdown menu.
+
+
+
+
