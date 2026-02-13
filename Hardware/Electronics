@@ -9,6 +9,29 @@ MPU6050   (I used a no-brand one)
 Optional: male/female connector to connect the LiPo to the battery shield in case the LiPo connector doenst fit the battery shield (as was the case for me)
 1x 220uF 16V Electrolytic capacitor   (altough anything between 100 and 470 should work. Make sure it's rated for at least 6,7V )
 1x Micro servo   (I used the MG90S as I like the metal gears. Make sure to order spares as about 10% are faulty from the start!
-
+4 stackable headers
 
 This is how you'll wire them together:
+
+1. Solder the stackable headers on the Wemos OLED shield and the Wemos D1 microcontroller board
+
+2. Stack them like this:
+  OLED shield
+  D1 mini
+  Battery shield
+
+3. Connect the servo 
+  Red wire to 5V/VBus in the OLED shield
+  Brown/Black to GND in the OLED shield
+  Yellow/Orange to D5 in the OLED shield (GPIO 14 on the D1 mini)
+
+4. Connect the Capacitor
+  - to GND in the OLED shield
+  + to 5V/Vbus in the OLED shield
+
+5. Connect the MPU6050
+  VCC to 3V3 in the OLED shield
+  GND to GND in the OLED shield
+  SCL to D1 in the OLED shield 
+  SDA to D2 in the OLED shield
+  
