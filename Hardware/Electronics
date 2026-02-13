@@ -9,3 +9,6 @@ MPU6050   (I used a no-brand one)
 Optional: male/female connector to connect the LiPo to the battery shield in case the LiPo connector doenst fit the battery shield (as was the case for me)
 1x 220uF 16V Electrolytic capacitor   (altough anything between 100 and 470 should work. Make sure it's rated for at least 6,7V )
 1x Micro servo   (I used the MG90S as I like the metal gears. Make sure to order spares as about 10% are faulty from the start!
+
+
+This is how you'll wire them together:
