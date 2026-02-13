@@ -2,11 +2,12 @@
 Automatic parachute deployment system for a waterrocket using a Wemos D1 mini and a MPU6050
 
 #Working on:
-prototype electronics test
++ prototype electronics test
+
 
 #Next up:
-CAD design to house the electronics
-CAD design for the parachute ejector
++ CAD design to house the electronics
++ CAD design for the parachute ejector
 
 #Plans to include:
 + NRF24L01+ for live telemetry readings and ground control
