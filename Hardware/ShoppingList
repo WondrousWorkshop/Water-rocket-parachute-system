@@ -1,0 +1,11 @@
+
+Things'you'll need:
+
+Wemos D1 Mini   (I used an old V3.0)
+Wemos mini OLED shield
+Wemos mini battery shield
+MPU6050   (I used a no-brand one) 
+1s LiPo   (I used a 450mAH LiPo by EMax)
+Optional: male/female connector to connect the LiPo to the battery shield in case the LiPo connector doenst fit the battery shield (as was the case for me)
+1x 220uF 16V Electrolytic capacitor   (altough anything between 100 and 470 should work. Make sure it's rated for at least 6,7V )
+1x Micro servo   (I used the MG90S as I like the metal gears. Make sure to order spares as about 10% are faulty from the start!
