@@ -199,7 +199,7 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
   
   //MPU6050 start en eventuele foutmleding
-  while (!mpu.begin()) {
+  while(!mpu.begin()) {
     display.clearDisplay();
     display.setCursor(0,0);
     display.println("MPU Error!");
