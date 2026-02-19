@@ -61,7 +61,6 @@ const char PAGE_HTML[] PROGMEM = R"=====(
           document.getElementById('staat').innerText = data.staat;
           document.getElementById('tijd').innerText = data.tijd + " s";
 
-          // De Smart Polling logica (aangepast voor pure data, zonder kleuren)
           let wachttijd = 500; 
 
           if (data.staat === "Lancering Detectie" || data.staat === "Coasting") {
@@ -69,11 +68,10 @@ const char PAGE_HTML[] PROGMEM = R"=====(
           } else if (data.staat === "Parachute Open!") {
              wachttijd = 2000; 
           }
-
           setTimeout(haalData, wachttijd);
         })
         .catch(() => {
-          document.getElementById('staat').innerText = "VERBINDING WEG...";
+          document.getElementById('staat').innerText = "Verbinden..";
           setTimeout(haalData, 1000);
         });
     }
@@ -90,11 +88,11 @@ const char PAGE_HTML[] PROGMEM = R"=====(
 <body>
   <h1>Ground Control</h1>
   
-  <div class="box">Sensor:<span id="mpu" class="waarde">Laden...</span></div>
-  <div class="box">Fase:<span id="staat" class="waarde">Laden...</span></div>
-  <div class="box">Vluchttijd:<span id="tijd" class="waarde">0.00 s</span></div>
+  <div class="box">Sensor status:<span id="mpu" class="waarde">Laden...</span></div>
+  <div class="box">Vlucht status:<span id="staat" class="waarde">Laden...</span></div>
+  <div class="box">Vlucht duur:<span id="tijd" class="waarde">0.00 s</span></div>
 
-  <button onclick="noodParachute()">NOOD-PARACHUTE</button>
+  <button onclick="noodParachute()">Activeer Parachute</button>
 </body>
 </html>
 )=====";
