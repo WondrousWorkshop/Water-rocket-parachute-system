@@ -81,79 +81,69 @@ const unsigned char raketLogo[] PROGMEM = {
   0x00, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00, 
   0x00, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00
 };
-//begin website-------------------Geschreven door Gemeni Pro------------------------------------------------------------------------------
+//begin website-----------------------------------------------------------------------------------------------------------
 const char PAGE_HTML[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Raket Ground Control</title>
+  <title>Ground Control</title>
   <style>
-    body { font-family: 'Arial', sans-serif; background-color: #121212; color: #ffffff; text-align: center; margin: 0; padding: 20px; }
-    h1 { color: #00ffcc; }
-    .box { background-color: #1e1e1e; border-radius: 10px; padding: 15px; margin: 10px auto; max-width: 300px; border: 1px solid #333; }
-    .waarde { font-size: 22px; font-weight: bold; color: #ffbf00; display: block; margin-top: 5px; }
-    .ok { color: #00ff00; }
-    .fout { color: #ff0000; }
-    .btn-paniek { background-color: #cc0000; color: white; font-size: 20px; font-weight: bold; padding: 15px 30px; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; width: 100%; max-width: 330px; box-shadow: 0px 4px 10px rgba(204, 0, 0, 0.5); }
-    .btn-paniek:active { background-color: #ff0000; transform: scale(0.95); }
+    body { font-family: sans-serif; background-color: white; color: black; padding: 20px; }
+    h1 { font-size: 24px; text-transform: uppercase; }
+    .box { border: 2px solid black; padding: 15px; margin-bottom: 15px; max-width: 300px; }
+    .waarde { font-size: 24px; font-weight: bold; display: block; margin-top: 5px; }
+    button { background-color: white; color: black; font-size: 18px; font-weight: bold; padding: 20px; border: 4px solid black; cursor: pointer; width: 100%; max-width: 334px; margin-top: 10px; }
+    button:active { background-color: black; color: white; }
   </style>
   <script>
-    let timeoutId;
-
     function haalData() {
       fetch('/data')
         .then(response => response.json())
         .then(data => {
-          document.getElementById('mpu').innerHTML = data.mpu;
-          document.getElementById('staat').innerHTML = data.staat;
-          document.getElementById('tijd').innerHTML = data.tijd + " s";
-          
-          if(data.mpu === "OK") document.getElementById('mpu').className = "waarde ok";
-          else document.getElementById('mpu').className = "waarde fout";
+          document.getElementById('mpu').innerText = data.mpu;
+          document.getElementById('staat').innerText = data.staat;
+          document.getElementById('tijd').innerText = data.tijd + " s";
 
-          // --- DE SMART POLLING LOGICA ---
-          let wachttijd = 500; // Standaard: 2x per seconde checken (op het platform)
+          // De Smart Polling logica (aangepast voor pure data, zonder kleuren)
+          let wachttijd = 500; 
 
           if (data.staat === "Lancering Detectie" || data.staat === "Coasting") {
-             // RAKET IS IN DE LUCHT! We stoppen met het lastigvallen van de Wemos.
-             // Geef de processor 100% rust voor de val-detectie.
-             wachttijd = 2500; // Wacht 2,5 seconden voordat we weer iets vragen
+             wachttijd = 2500; 
           } else if (data.staat === "Parachute Open!") {
-             wachttijd = 2000; // Vlucht is voorbij, rustig aan doen.
+             wachttijd = 2000; 
           }
 
-          timeoutId = setTimeout(haalData, wachttijd);
+          setTimeout(haalData, wachttijd);
         })
         .catch(() => {
-          // WiFi bereik kwijt? Probeer het over 1 seconde nog eens stilzwijgend
-          document.getElementById('staat').innerHTML = "VERBINDING WEG...";
-          document.getElementById('staat').style.color = "red";
-          timeoutId = setTimeout(haalData, 1000);
+          document.getElementById('staat').innerText = "VERBINDING WEG...";
+          setTimeout(haalData, 1000);
         });
     }
 
     window.onload = haalData;
 
     function noodParachute() {
-      if(confirm("🚨 WEET JE ZEKER DAT JE DE PARACHUTE NU WILT OPENEN?")) {
+      if(confirm("PARACHUTE OPENEN?")) {
         fetch('/panic');
       }
     }
   </script>
 </head>
 <body>
-  <h1>🚀 Ground Control</h1>
+  <h1>Ground Control</h1>
   
-  <div class="box">Sensor: <span id="mpu" class="waarde">Laden...</span></div>
-  <div class="box">Fase: <span id="staat" class="waarde">Laden...</span></div>
-  <div class="box">Vluchttijd: <span id="tijd" class="waarde">0.00 s</span></div>
+  <div class="box">Sensor:<span id="mpu" class="waarde">Laden...</span></div>
+  <div class="box">Fase:<span id="staat" class="waarde">Laden...</span></div>
+  <div class="box">Vluchttijd:<span id="tijd" class="waarde">0.00 s</span></div>
 
-  <button class="btn-paniek" onclick="noodParachute()">🚨 NOOD-PARACHUTE</button>
+  <button onclick="noodParachute()">NOOD-PARACHUTE</button>
 </body>
 </html>
 )=====";
-//einde website----------------------------------------------------
+//einde website----------------
 
 void setup() {
   Serial.begin(115200); //alleen voor testen via USB 
