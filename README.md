@@ -6,10 +6,10 @@ Automatic parachute deployment system for a waterrocket using a Wemos D1 mini an
 
 
 #Next up:
-+ CAD design to house the electronics
-+ CAD design for the parachute ejector
++ Modulair CAD design to house the electronics
++ Modulair CAD design for the parachute ejector
 
 #Plans to include:
 + NRF24L01+ for live telemetry readings and ground control
-+ Payload delivery (parachute or glider)
++ Payload delivery (wild flower seeds)
 + Servo controlled fins with PID (<known as the Waterbottle-rocketeers final-boss)
