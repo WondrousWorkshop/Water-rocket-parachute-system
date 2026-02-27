@@ -54,12 +54,6 @@ const char PAGE_HTML[] PROGMEM = R"=====(
     button:active { background-color: black; color: white; }
   </style>
   <script>
-
-    function resetMissie() {
-    if(confirm("reset?")) {
-        fetch('/reset');
-      }
-    }
     function haalData() {
       fetch('/data')
         .then(response => response.json())
@@ -69,7 +63,6 @@ const char PAGE_HTML[] PROGMEM = R"=====(
           document.getElementById('tijd').innerText = data.tijd + " s";
 
           let wachttijd = 500; 
-
           if (data.staat === "Lancering Detectie" || data.staat === "Coasting") {
              wachttijd = 2500; 
           } else if (data.staat === "Parachute Open!") {
@@ -90,12 +83,13 @@ const char PAGE_HTML[] PROGMEM = R"=====(
         fetch('/reset');
       }
     }
+
     function noodParachute() {
-      if(confirm("PARACHUTE OPENEN?")) {
+      if(confirm("Parachute openen?")) {
         fetch('/panic');
       }
     }
-  </script>
+</script>
 </head>
 <body>
   <h1>Ground Control</h1>
