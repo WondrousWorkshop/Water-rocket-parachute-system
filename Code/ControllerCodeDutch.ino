@@ -15,6 +15,7 @@
 #define SERVO_PIN D5 
 #define SERVO_GESLOTEN 0  //gesloten positie van de parachute servo
 #define SERVO_OPEN 90  //open positie van de parachute servo
+#define RESET_KNOP_PIN D3 //drukknop 
 
 #define SCREEN_WIDTH 64  //Voor het OLED shield
 #define SCREEN_HEIGHT 48  
@@ -98,6 +99,12 @@ const char PAGE_HTML[] PROGMEM = R"=====(
     button:active { background-color: black; color: white; }
   </style>
   <script>
+
+    function resetMissie() {
+    if(confirm("reset?")) {
+        fetch('/reset');
+      }
+    }
     function haalData() {
       fetch('/data')
         .then(response => response.json())
@@ -138,6 +145,7 @@ const char PAGE_HTML[] PROGMEM = R"=====(
   <div class="box">Vlucht duur:<span id="tijd" class="waarde">0.00 s</span></div>
 
   <button onclick="noodParachute()">Activeer Parachute</button>
+  <button onclick="resetMissie()" style="border-color: gray;">RESET</button>
 </body>
 </html>
 )=====";
@@ -147,6 +155,7 @@ void setup() {
   Serial.begin(115200); //alleen voor testen via USB 
   parachuteServo.attach(SERVO_PIN);
   parachuteServo.write(SERVO_GESLOTEN);
+  pinMode(RESET_KNOP_PIN, INPUT_PULLUP);
 
   delay (500); // laatste aanpasisng op de Github stelt dit voor.
 
@@ -165,9 +174,30 @@ void setup() {
     }
     server.send(200, "text/plain", "Parachute geforceerd open!"); 
   });
+  
+  server.on("/reset", []() { 
+  huidige_staat = status_op_platform;
+  eindTijdParachute = 0;
+  lanceerTijd = 0;
+  parachuteServo.write(SERVO_GESLOTEN);
+  server.send(200, "text/plain", "Gereset!"); 
+  });
 
   server.begin();
-  
+ 
+  if (digitalRead(RESET_KNOP_PIN) == LOW) { //low omdat de ingebouwde pulldown een constante status van high veroorzaakt tot de knop is ingedrukt en een pad naar gnd maakt.
+    delay(50); // noise filter
+    if (digitalRead(RESET_KNOP_PIN) == LOW) {
+    huidige_staat = status_op_platform;
+    lanceerTijd = 0;
+    eindTijdParachute = 0.0;
+    parachuteServo.write(SERVO_GESLOTEN);
+    Serial.println("Systeem gereset via fysieke knop");
+      while(digitalRead(RESET_KNOP_PIN) == LOW) {
+      delay(10);
+    }
+  }
+}
   
   //OLED start en eventuele foutmleding
   while(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {   //check of 0x3C klopt op het fysieke Wemos OLED shield
