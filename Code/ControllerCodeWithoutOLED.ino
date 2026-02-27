@@ -12,6 +12,7 @@
 #define SERVO_PIN D5 
 #define SERVO_GESLOTEN 0  // gesloten positie van de parachute servo
 #define SERVO_OPEN 90     // open positie van de parachute servo
+#define RESET_KNOP_PIN D3 //drukknop
 
 Adafruit_MPU6050 mpu;
 Servo parachuteServo;
@@ -53,6 +54,12 @@ const char PAGE_HTML[] PROGMEM = R"=====(
     button:active { background-color: black; color: white; }
   </style>
   <script>
+
+    function resetMissie() {
+    if(confirm("reset?")) {
+        fetch('/reset');
+      }
+    }
     function haalData() {
       fetch('/data')
         .then(response => response.json())
@@ -78,6 +85,11 @@ const char PAGE_HTML[] PROGMEM = R"=====(
 
     window.onload = haalData;
 
+    function resetMissie() { 
+      if(confirm("Reset?")) {
+        fetch('/reset');
+      }
+    }
     function noodParachute() {
       if(confirm("PARACHUTE OPENEN?")) {
         fetch('/panic');
@@ -93,6 +105,7 @@ const char PAGE_HTML[] PROGMEM = R"=====(
   <div class="box">Vlucht duur:<span id="tijd" class="waarde">0.00 s</span></div>
 
   <button onclick="noodParachute()">Activeer Parachute</button>
+  <button onclick="resetMissie()" style="border-color: gray;">RESET</button>
 </body>
 </html>
 )=====";
@@ -102,6 +115,7 @@ void setup() {
   Serial.begin(115200); 
   parachuteServo.attach(SERVO_PIN);
   parachuteServo.write(SERVO_GESLOTEN);
+  pinMode(RESET_KNOP_PIN, INPUT_PULLUP);
 
   delay (500); 
 
@@ -113,6 +127,14 @@ void setup() {
   
   server.on("/", []() { server.send(200, "text/html", PAGE_HTML); });
   server.on("/data", stuurData); 
+
+  server.on("/reset", []() { 
+    huidige_staat = status_op_platform;
+    eindTijdParachute = 0;
+    lanceerTijd = 0;
+    parachuteServo.write(SERVO_GESLOTEN);
+    server.send(200, "text/plain", "Gereset!"); 
+  });
   
   server.on("/panic", []() { 
     if(huidige_staat != status_parachute) {
@@ -139,6 +161,20 @@ void setup() {
 } // end setup
 
 void loop() {
+
+  if (digitalRead(RESET_KNOP_PIN) == LOW) {
+  delay(50); // noise filter
+  if (digitalRead(RESET_KNOP_PIN) == LOW) {
+    huidige_staat = status_op_platform;
+    lanceerTijd = 0;
+    eindTijdParachute = 0.0;
+    parachuteServo.write(SERVO_GESLOTEN);
+    Serial.println("Reset door knop");
+    while(digitalRead(RESET_KNOP_PIN) == LOW) {
+      delay(10);
+    }
+  }
+}
   
   server.handleClient();
   sensors_event_t a, g, temp;
