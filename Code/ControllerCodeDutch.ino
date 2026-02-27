@@ -98,13 +98,7 @@ const char PAGE_HTML[] PROGMEM = R"=====(
     button { background-color: white; color: black; font-size: 18px; font-weight: bold; padding: 20px; border: 4px solid black; cursor: pointer; width: 100%; max-width: 334px; margin-top: 10px; }
     button:active { background-color: black; color: white; }
   </style>
-  <script>
-
-    function resetMissie() {
-    if(confirm("reset?")) {
-        fetch('/reset');
-      }
-    }
+   <script>
     function haalData() {
       fetch('/data')
         .then(response => response.json())
@@ -114,7 +108,6 @@ const char PAGE_HTML[] PROGMEM = R"=====(
           document.getElementById('tijd').innerText = data.tijd + " s";
 
           let wachttijd = 500; 
-
           if (data.staat === "Lancering Detectie" || data.staat === "Coasting") {
              wachttijd = 2500; 
           } else if (data.staat === "Parachute Open!") {
@@ -130,12 +123,18 @@ const char PAGE_HTML[] PROGMEM = R"=====(
 
     window.onload = haalData;
 
+    function resetMissie() { 
+      if(confirm("Reset?")) {
+        fetch('/reset');
+      }
+    }
+
     function noodParachute() {
-      if(confirm("PARACHUTE OPENEN?")) {
+      if(confirm("Parachute openen?")) {
         fetch('/panic');
       }
     }
-  </script>
+</script>
 </head>
 <body>
   <h1>Ground Control</h1>
